@@ -1,31 +1,35 @@
 mod cli;
-mod config;
-mod util;
 mod commands;
-mod external;
 
-use anyhow::Result;
+use crate::cli::build_cli;
+use crate::commands::{update, search, play, download, history};
 
 #[tokio::main]
-async fn main() -> Result<()> {
-    let matches = cli::build_cli().get_matches();
+async fn main() {
+    let matches = build_cli().get_matches();
 
-    if matches.is_present("version") {
-        cli::version_info();
-        return Ok(());
+    if matches.get_flag("version") {
+        println!("watchAnime version 1.0");
+        return;
     }
 
-    if matches.is_present("help") {
-        cli::help_info();
-        return Ok(());
+    if matches.get_flag("help") {
+        build_cli().print_help().unwrap();
+        return;
     }
 
-    if matches.is_present("update") {
-        commands::update::update_script().await?;
-        return Ok(());
+    if matches.get_flag("update") {
+        update::update_script().await;
+        return;
     }
 
-    // Rest of the command handling goes here
+    if let Some(query) = matches.get_one::<String>("query") {
+        search::search_anime(query).await;
+    }
 
-    Ok(())
+    if matches.get_flag("continue") {
+        history::continue_watching().await;
+    }
+
+    // Other command handling here
 }

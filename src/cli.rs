@@ -1,36 +1,27 @@
-use clap::{Command, Arg};
+use clap::{Arg, Command};
 
-const VERSION_NUMBER: &str = "4.8.7";
-
-pub fn build_cli() -> Command<'static> {
-    Command::new("ani-cli")
-        .version(VERSION_NUMBER)
-        .about("Anime CLI")
-        .arg(Arg::new("query").about("Anime query").required(false))
-        .arg(Arg::new("continue").short('c').long("continue").about("Continue watching from history"))
-        .arg(Arg::new("download").short('d').long("download").about("Download the video instead of playing it"))
-        .arg(Arg::new("delete").short('D').long("delete").about("Delete history"))
-        .arg(Arg::new("syncplay").short('s').long("syncplay").about("Use Syncplay to watch with friends"))
-        .arg(Arg::new("select_nth").short('S').long("select-nth").about("Select nth entry").takes_value(true))
-        .arg(Arg::new("quality").short('q').long("quality").about("Specify the video quality").takes_value(true))
-        .arg(Arg::new("vlc").short('v').long("vlc").about("Use VLC to play the video"))
-        .arg(Arg::new("version").short('V').long("version").about("Show the version of the script"))
-        .arg(Arg::new("help").short('h').long("help").about("Show this help message and exit"))
-        .arg(Arg::new("episode").short('e').long("episode").about("Specify the number of episodes to watch").takes_value(true))
-        .arg(Arg::new("dub").long("dub").about("Play dubbed version"))
-        .arg(Arg::new("rofi").long("rofi").about("Use rofi instead of fzf for the interactive menu"))
-        .arg(Arg::new("skip").long("skip").about("Use ani-skip to skip the intro of the episode (mpv only)"))
-        .arg(Arg::new("no_detach").long("no-detach").about("Don't detach the player (useful for in-terminal playback, mpv only)"))
-        .arg(Arg::new("exit_after_play").long("exit-after-play").about("Exit the player, and return the player exit code (useful for non interactive scenarios, works only if --no-detach is used, mpv only)"))
-        .arg(Arg::new("skip_title").long("skip-title").about("Use given title as ani-skip query").takes_value(true))
-        .arg(Arg::new("nextep_countdown").short('N').long("nextep-countdown").about("Display a countdown to the next episode"))
-        .arg(Arg::new("update").short('U').long("update").about("Update the script"))
-}
-
-pub fn version_info() {
-    println!("{}", VERSION_NUMBER);
-}
-
-pub fn help_info() {
-    println!("{}", build_cli().render_usage());
+pub fn build_cli() -> Command {
+    Command::new("watchAnime")
+        .version("1.0")
+        .author("Your Name <your.email@example.com>")
+        .about("A CLI tool to search and watch anime")
+        .arg(Arg::new("query").help("Anime query").required(false))
+        .arg(Arg::new("continue").long("continue").help("Continue watching from history"))
+        .arg(Arg::new("download").long("download").help("Download the video instead of playing it"))
+        .arg(Arg::new("delete").long("delete").help("Delete history"))
+        .arg(Arg::new("syncplay").long("syncplay").help("Use Syncplay to watch with friends"))
+        .arg(Arg::new("select-nth").long("select-nth").help("Select nth entry").value_name("N"))
+        .arg(Arg::new("quality").long("quality").help("Specify the video quality").value_name("QUALITY"))
+        .arg(Arg::new("vlc").short('v').long("vlc").help("Use VLC to play the video"))
+        .arg(Arg::new("version").long("version").help("Show the version of the script"))
+        .arg(Arg::new("help").long("help").help("Show this help message and exit"))
+        .arg(Arg::new("episode").long("episode").help("Specify the number of episodes to watch").value_name("EPISODES"))
+        .arg(Arg::new("dub").long("dub").help("Play dubbed version"))
+        .arg(Arg::new("rofi").long("rofi").help("Use rofi instead of fzf for the interactive menu"))
+        .arg(Arg::new("skip").long("skip").help("Use ani-skip to skip the intro of the episodes"))
+        .arg(Arg::new("no-detach").long("no-detach").help("Don't detach the player (useful for in-terminal players)"))
+        .arg(Arg::new("exit-after-play").long("exit-after-play").help("Exit the player, and return the player exit code"))
+        .arg(Arg::new("skip-title").long("skip-title").help("Use given title as ani-skip query").value_name("TITLE"))
+        .arg(Arg::new("next-ep-countdown").long("next-ep-countdown").help("Display a countdown to the next episode"))
+        .arg(Arg::new("update").long("update").help("Update the script"))
 }
